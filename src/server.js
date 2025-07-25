@@ -3,6 +3,8 @@ const cors = require('cors');
 require('dotenv').config();
 
 const productRoutes = require('./routes/productRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const draftOrderRoutes = require('./routes/draftOrderRoutes');
 
 async function startServer() {
   const app = express();
@@ -10,6 +12,8 @@ async function startServer() {
   app.use(express.json());
 
   app.use('/api/products', productRoutes);
+  app.use('/api/orders', orderRoutes);
+  app.use('/api/draft-order', draftOrderRoutes);
 
   const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {
