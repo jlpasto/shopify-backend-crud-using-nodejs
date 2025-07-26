@@ -1,7 +1,74 @@
 # Create product
-curl -Method POST http://localhost:3000/api/products -Headers @{ "Content-Type" = "application/json" } -Body '{ "title": "Test Product 1", "description": "A sample product for Shopify sync.", "vendor": "Your Brand", "productType": "T-Shirt", "tags": ["summer", "cotton"], "variants": [ { "title": "Small", "price": 19.99, "sku": "TSHIRT-SM", "inventoryQuantity": 50, "weight": 200, "weightUnit": "g" } ], "images": [ { "src": "https://example.com/image1.jpg" } ] }' | Write-Output
+ curl -Method POST http://localhost:3000/api/products `
+   -Headers @{ "Content-Type" = "application/json" } `
+   -Body '{
+     "title": "Cool socks",
+     "productOptions": [
+       {
+         "name": "Color",
+         "values": [
+           { "name": "Red" },
+           { "name": "Blue" }
+         ]
+       },
+       {
+         "name": "Size",
+         "values": [
+           { "name": "Small" },
+           { "name": "Large" }
+         ]
+       }
+     ]
+   }'
+
+# Update product 
+curl -Method PUT http://localhost:3000/api/products/8125595189348 -Headers @{ "Content-Type" = "application/json" } -Body '{
+  "title": "Updated Eco-Friendly Bamboo Water Bottle",
+  "handle": "updated-eco-bamboo-water-bottle",
+  "vendor": "EcoLife Products Updated",
+  "productType": "Water Bottles",
+  "status": "ACTIVE",
+  "tags": ["eco-friendly", "bamboo", "sustainable", "water bottle", "reusable", "updated"],
+  "seo": {
+    "title": "Updated Eco-Friendly Bamboo Water Bottle - Sustainable Hydration | EcoLife",
+    "description": "Updated description: Discover our premium bamboo water bottle made from 100% natural materials. Perfect for sustainable living. Free shipping available."
+  }
+}'
+
+
+
 
 # Create draft order
 curl -Method POST http://localhost:3000/api/draft-order `
   -Headers @{ "Content-Type" = "application/json" } `
   -Body '{ "input": { "note": "Test draft order 1", "email": "test.user@shopify.com", "taxExempt": true, "tags": ["foo", "bar"], "shippingLine": { "title": "Custom Shipping", "price": 4.55 }, "shippingAddress": { "address1": "123 Main St", "city": "Waterloo", "province": "Ontario", "country": "Canada", "zip": "A1A 1A1" }, "billingAddress": { "address1": "456 Main St", "city": "Toronto", "province": "Ontario", "country": "Canada", "zip": "Z9Z 9Z9" }, "appliedDiscount": { "description": "damaged", "value": 5.0, "amount": 5.0, "valueType": "FIXED_AMOUNT", "title": "Custom" }, "lineItems": [ { "title": "Custom product", "originalUnitPrice": 14.99, "quantity": 5, "appliedDiscount": { "description": "wholesale", "value": 5.0, "amount": 3.74, "valueType": "PERCENTAGE", "title": "Fancy" }, "weight": { "value": 1, "unit": "KILOGRAMS" }, "customAttributes": [ { "key": "color", "value": "Gold" }, { "key": "material", "value": "Plastic" } ] }, { "variantId": "gid://shopify/ProductVariant/46277177475172", "quantity": 2 } ], "customAttributes": [ { "key": "name", "value": "Achilles" }, { "key": "city", "value": "Troy" } ] } }' | Write-Output
+
+# Get product variant by ID
+curl http://localhost:3000/api/product-variants/46277689606244
+
+# Get product variant by IDs
+curl http://localhost:3000/api/product-variants/bulk?ids=46277689606244,46278233292900
+
+# Create product variant
+curl -Method POST http://localhost:3000/api/product-variants/product/8125324951652 `
+  -Headers @{ "Content-Type" = "application/json" } `
+  -Body '{
+    "variants": [
+      {
+        "price": 15.99,
+        "compareAtPrice": 19.99,
+        "optionValues": [
+          {
+            "name": "Yellow",
+            "optionId": "gid://shopify/ProductOption/10333850566756"
+          },
+          {
+            "name": "Large",
+            "optionId": "gid://shopify/ProductOption/10333850599524"
+          }
+
+        ]
+      }
+    ]
+  }'
+

@@ -5,6 +5,8 @@ require('dotenv').config();
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const draftOrderRoutes = require('./routes/draftOrderRoutes');
+const productVariantRoutes = require('./routes/productVariantRoutes');
+const productOptionRoutes = require('./routes/productOptionRoutes');
 
 async function startServer() {
   const app = express();
@@ -14,6 +16,8 @@ async function startServer() {
   app.use('/api/products', productRoutes);
   app.use('/api/orders', orderRoutes);
   app.use('/api/draft-order', draftOrderRoutes);
+  app.use('/api/product-variants', productVariantRoutes);
+  app.use('/api/product-options', productOptionRoutes);
 
   const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {
